@@ -138,8 +138,7 @@ const DesignCanvas = ({ dimensions, data }) => {
         <button
           onClick={(e) => {
             e.preventDefault();
-            console.log(fabricCanvasRef.current.toJSON());
-            //download(JSON.stringify(fabricCanvasRef.current.toJSON()), "file.json");
+            download(JSON.stringify(fabricCanvasRef.current.toJSON()), "file.json");
           }}
         >
           To JSON
