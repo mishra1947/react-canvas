@@ -3,13 +3,17 @@ import React, { Fragment, useRef, useEffect } from "react";
 const fabric = window.fabric;
 
 const DesignCanvas = ({ dimensions, data }) => {
-  console.log(dimensions, data);
   const canvasRef = useRef(null);
   const fabricCanvasRef = useRef(null);
 
   useEffect(() => {
     fabricCanvasRef.current = new fabric.Canvas(canvasRef.current);
-  }, []);
+    return () => {
+      canvasRef.current = null;
+      fabricCanvasRef.current && fabricCanvasRef.current.dispose();
+      fabricCanvasRef.current = null;
+    };
+  }, [dimensions]);
 
   useEffect(() => {
     if (data && data.children && data.children.length) {
@@ -129,19 +133,20 @@ const DesignCanvas = ({ dimensions, data }) => {
   };
 
   return (
-    <Fragment>
+    <div>
       <div style={{ marginBottom: "10px" }}>
         <button
           onClick={(e) => {
             e.preventDefault();
-            download(JSON.stringify(fabricCanvasRef.current.toJSON()), "file.json");
+            console.log(fabricCanvasRef.current.toJSON());
+            //download(JSON.stringify(fabricCanvasRef.current.toJSON()), "file.json");
           }}
         >
           To JSON
         </button>
       </div>
       <canvas ref={canvasRef} width={dimensions.width} height={dimensions.height} style={{ border: "1px solid" }} />
-    </Fragment>
+    </div>
   );
 };
 
